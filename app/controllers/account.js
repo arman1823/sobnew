@@ -47,6 +47,7 @@ module.exports = {
 //            , room = req.body.room || ''
 //            , floor = req.body.floor || '';
 
+        
         var cardrooms = locales.encode(req.body.card_rooms)
             ,cardaddress = locales.encode(req.body.card_address)
             ,dom = locales.encode(req.body.dom)

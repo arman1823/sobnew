@@ -7,56 +7,69 @@ var kit = global.kit
   , moment = require('moment');
 
 module.exports = {
-  index: function(req, res) {
-    kit.models.homeBox.find({ order: ['homeBox.order ASC'] }, function(err, results) {
-      var tasks = []
-        , boxes = [];
-      _.forEach(results, function(result) {
-        switch(result.type) {
-          case 'custom':
-            tasks.push(function(cb) {
-              cb(null, result);
-            });
-            break;
-          case 'events':
-            tasks.push(function(cb) {
-              kit.models.event.find({ where: { id: result.contentId } }, function(err, rs) {
-                cb(err, rs[0] || {});
-              });
-            });
-            break;
-          case 'news':
-            tasks.push(function(cb) {
-              kit.models.news.find({ where: { id: result.contentId } }, function(err, rs) {
-                cb(err, rs[0] || {});
-              });
-            });
-            break;
-          case 'brands':
-            tasks.push(function(cb) {
-              kit.models.brand.find({ where: { id: result.contentId } }, function(err, rs) {
-                rs[0].type = 'brand';
-                if (!err && rs.length > 0) {
-                  var v = rs[0];
-                  kit.models.image.find({ where: { entity: v.id, type: 'brand' }, order: ['image.order ASC'] }, function(e, imgs) {
-                    v.image = imgs.length > 0 ? (imgs[2] ? imgs[2].file : imgs[1].file) : null;
-                    cb(err, v || {});
-                  });
-                } else {
-                  cb(err, rs[0] || {});
-                }
-              });
-            });
-            break;
-        }
-      });
 
-      async.series(tasks, function(err, rls) {
-        boxes = rls;
-        res.render('index', { boxes: boxes, moment: moment, S: S });
-      });
-    });
-  },
+    index: function(req, res) {
+        kit.models.ad.find({}, function(err, results) {
+            if(err){
+                console.log(err);
+            }else{
+                console.log(results[0]);
+                res.render('index', { ads: results });
+            }
+
+        });
+    },
+
+//  index: function(req, res) {
+//    kit.models.homeBox.find({ order: ['homeBox.order ASC'] }, function(err, results) {
+//      var tasks = []
+//        , boxes = [];
+//      _.forEach(results, function(result) {
+//        switch(result.type) {
+//          case 'custom':
+//            tasks.push(function(cb) {
+//              cb(null, result);
+//            });
+//            break;
+//          case 'events':
+//            tasks.push(function(cb) {
+//              kit.models.event.find({ where: { id: result.contentId } }, function(err, rs) {
+//                cb(err, rs[0] || {});
+//              });
+//            });
+//            break;
+//          case 'news':
+//            tasks.push(function(cb) {
+//              kit.models.news.find({ where: { id: result.contentId } }, function(err, rs) {
+//                cb(err, rs[0] || {});
+//              });
+//            });
+//            break;
+//          case 'brands':
+//            tasks.push(function(cb) {
+//              kit.models.brand.find({ where: { id: result.contentId } }, function(err, rs) {
+//                rs[0].type = 'brand';
+//                if (!err && rs.length > 0) {
+//                  var v = rs[0];
+//                  kit.models.image.find({ where: { entity: v.id, type: 'brand' }, order: ['image.order ASC'] }, function(e, imgs) {
+//                    v.image = imgs.length > 0 ? (imgs[2] ? imgs[2].file : imgs[1].file) : null;
+//                    cb(err, v || {});
+//                  });
+//                } else {
+//                  cb(err, rs[0] || {});
+//                }
+//              });
+//            });
+//            break;
+//        }
+//      });
+//
+//      async.series(tasks, function(err, rls) {
+//        boxes = rls;
+//        res.render('index', { boxes: boxes, moment: moment, S: S });
+//      });
+//    });
+//  },
 
   howToGet: function(req, res) {
     kit.models.section.find({ where: { name: 'how-to-get' } }, function(err, results) {

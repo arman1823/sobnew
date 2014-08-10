@@ -2,20 +2,60 @@ extends layout
 
 block content
     #index-page.clearfix
-        each box in boxes
-            - var rand_color = Math.floor(Math.random()*12);
-            - if (box.type == 'brand') box.link = '/brand/' + box.id + '/' + S(_o(box.name, 'en')).slugify().s
-            if box.link
-                a.index-box(href="#{box.link.match(/^(\/|http:\/\/)/i) ? '' : 'http://'}#{box.link}", target="#{box.link.match(/^http/i) ? '_blank' : '_self'}", class="hover-color-#{rand_color}")
-                    +bx(box, rand_color)
-            else
-                .index-box(class="hover-color-#{rand_color}")
-                    +bx(box, rand_color)
-
-mixin bx(box, rand_color)
-    - var img = box.image;
-    if img
-        
-    .box-label(class="box-label-color-#{rand_color}")
-
-
+        .panel.panel-default
+            .panel-heading
+                //- a.btn.btn-primary(href="/account/ads/create") Create Ad
+            .panel-body
+                table.table.table-hover
+                    thead
+                        tr
+                            th Name
+                            th cardrooms
+                            th cardaddress
+                            th dom
+                            th korpus
+                            th stroenie
+                            th fdataMetroIdh
+                            th farval
+                            th levels
+                            th fullevel
+                            th general
+                            th residential
+                            th kitchen
+                            th squarerooms
+                            th notes
+                            th phone
+                            th logo
+                            th logo
+                    tbody
+                        if ads
+                            each ad in ads
+                                script.
+                                    if ( #{ad.id} )
+                                      console.log('you are awesome', #{ad.id} );
+                                    else
+                                      console.log('use jade')
+                                  tr
+                                      td: a(href="/account/ad/#{ad.id}") #{_o(ad.name)}
+                                    td #{_o(ad.cardrooms)}
+                                    td #{_o(ad.cardaddress)}
+                                    td #{_o(ad.dom)}
+                                    td #{_o(ad.korpus)}
+                                    td #{_o(ad.stroenie)}
+                                    td #{_o(ad.fdataMetroIdh)}
+                                    td #{_o(ad.farval)}
+                                    td #{_o(ad.levels)}
+                                    td #{_o(ad.fullevel)}
+                                    td #{_o(ad.general)}
+                                    td #{_o(ad.residential)}
+                                    td #{_o(ad.kitchen)}
+                                    td #{_o(ad.squarerooms)}
+                                    td #{_o(ad.notes)}
+                                    td #{_o(ad.phone)}
+                                    td
+                                        if(ad.logo)
+                                            img(src="/uploads/#{ad.logo}", width="100")
+                                    td
+                                        a.edit(href="/account/ad/#{ad.id}") Edit
+                                        br
+                                        a.delete(href="/account/ad/delete?id=#{ad.id}") Delete

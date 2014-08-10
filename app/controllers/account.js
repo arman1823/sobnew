@@ -25,6 +25,7 @@ module.exports = {
 
     ads: function(req, res) {
         kit.models.ad.find({}, function(err, results) {
+            console.log(results);
             res.render('account/ads', { ads: results });
         });
     },
